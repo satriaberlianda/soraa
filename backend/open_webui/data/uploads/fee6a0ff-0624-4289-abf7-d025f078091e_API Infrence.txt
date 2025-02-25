@@ -1,0 +1,46 @@
+-H "Content-Type: application/json" \
+    -H "Authorization: Bearer $TOKEN" \
+    -d '{
+        "model": "model here",
+        "text": [
+            {
+                "role": "system",
+                "content": "You are a helpful assistant."
+                "name": "Tesseract"
+                "author": "NinthGen DeepLearn"
+            },
+            {
+                "role": "user",
+                "content": "perkenalkan dirimu"
+            }
+        ]
+    }'
+
+
+CREATE TABLE users (
+    Username VARCHAR(255) NOT NULL,
+    Number VARCHAR(15) NOT NULL,
+    BearerAuth VARCHAR(255) NOT NULL,
+    Created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (Username)
+);
+
+-- Tabel billing
+CREATE TABLE billing (
+    Username VARCHAR(255) NOT NULL,
+    CreditRemaining DECIMAL(20,6) DEFAULT NULL,
+    CreditUsage DECIMAL(20,6) DEFAULT NULL,
+    Updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (Username),  
+    FOREIGN KEY (Username) REFERENCES users(Username) 
+);
+
+
+
+Model	                Pricing (I/O)
+Tesseract 2.1 9B	$1/M    Tokens
+Tesseract 3.2 90B	$1.80/M Tokens	
+Tesseract 3.3 70B	$2/M    Tokens	
+
+
+curl -w "\n==========================================\nResponse Time: %{time_total}s\n==========================================\nModel: Tesseract-2.1_9B\nStatus: %{http_code}\n==========================================\n" -o /dev/null -s https://deepl.ninthgen.cloud/chat -H "Authorization: Bearer ree" -H "Content-Type: application/json" -d "{\"model\": \"Tesseract-2.1_9B\", \"text\": [{\"role\": \"system\", \"content\": \"Asisten gacor.\", \"name\": \"NinthGen\", \"author\": \"NinthGen DeepLearn\"}, {\"role\": \"user\", \"content\": \"Hello\"}]}"
